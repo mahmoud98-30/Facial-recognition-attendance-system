@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', include('account.urls')),
-    # path('blog/', include('attendance.urls'))
+    # path('', include('attendance.urls')),
+
+
 ]

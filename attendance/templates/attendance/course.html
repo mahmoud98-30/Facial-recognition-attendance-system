@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+<div class="col-md-12">
+                  <div class="card mb-4">
+                    <h5 class="card-header">Add Course</h5>
+                    <div class="card-body">
+                      <div>
+                         <form method="POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <input class="btn btn-secondary mt-4" type="submit" value="save">
+                    </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            <hr class="my-5" />
+{% endblock body %}

@@ -1,6 +1,6 @@
-import username as username
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.utils.translation import gettext_lazy as _
@@ -8,12 +8,61 @@ from django.utils.translation.trans_null import ngettext_lazy
 
 from account.forms import ProfileUpdateForm, StudentCreationForm, UpdateForm, LecturerCreationForm
 from account.models import User
+from attendance.forms import CourseForm, AttendanceForm
+from attendance.models import Course, Attendance
 
 
 @login_required(login_url='/login-page/')
 def home(request):
-    return render(request, 'index.html', {
+    form_course = CourseForm(request.POST or None)
+    form_attendance = AttendanceForm(request.POST or None)
+    course = Attendance.objects.filter(student=request.user.id)
+    attendance = Attendance.objects.all()
 
+    if request.method == 'POST' and "course_form" in request.POST:
+        if form_course.is_valid():
+            form = form_course.save(commit=False)
+            form.lecturer = request.user
+            form.save()
+            msg = 'done '
+            messages.add_message(request, messages.SUCCESS, msg)
+        form = CourseForm()
+        print(request.POST)
+        print(request.user)
+        return render(request, 'index.html', {
+            'form_course': form_course,
+            'form_attendance': form_attendance,
+            'course': course,
+            'attendance': attendance,
+        }, )
+
+    elif request.method == 'POST' and "attendance" in request.POST:
+        if form_attendance.is_valid():
+            form = form_attendance.save(commit=False)
+            form.student = request.user
+            if Attendance.objects.filter(course=request.POST['course']).filter(student=request.user.id):
+                msg = _(
+                    'you are already registered in this course.')
+                messages.add_message(request, messages.SUCCESS, msg)
+                return HttpResponseRedirect("/")
+            else:
+                form.save()
+                msg = 'done '
+                messages.add_message(request, messages.SUCCESS, msg)
+            form = AttendanceForm()
+            course = Attendance.objects.filter(student=request.user.id)
+            attendance = Attendance.objects.all()
+            return render(request, 'index.html', {
+                'form_course': form_course,
+                'form_attendance': form_attendance,
+                'course': course,
+                'attendance': attendance,
+            }, )
+    return render(request, 'index.html', {
+        'form_course': form_course,
+        'form_attendance': form_attendance,
+        'course': course,
+        'attendance': attendance,
     }, )
 
 
@@ -63,7 +112,7 @@ def student_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('/student-login/')
+    return redirect('/')
 
 
 @login_required(login_url='/student-login/')
@@ -99,7 +148,7 @@ def lecturer_register(request):
             msg = _(
                 f'Congratulations {username} Your registration has been completed successfully.')
             messages.add_message(request, messages.SUCCESS, msg)
-            return redirect('/student-login/')
+            return redirect('/lecturer-login/')
     else:
         form = LecturerCreationForm()
     return render(request, 'account/lecturer/register.html', {
@@ -111,16 +160,27 @@ def lecturer_register(request):
 def lecturer_login(request):
     if request.method == 'POST':
         email = request.POST['email']
-        username = User.objects.get(email=email)
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        print(user)
-        if user is not None:
-            login(request, user)
-            return redirect('/')
+        try:
+            username = get_object_or_404(User, email=email)
+        except :
+            msg = _('There is an error in the index number or password')
+            messages.add_message(request, messages.WARNING, msg)
+            return HttpResponseRedirect('/lecturer-login/')
+        if username:
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            print(user)
+            if user is not None:
+                login(request, user)
+                return redirect('/')
+            else:
+                msg = _('There is an error in the index number or password')
+                messages.add_message(request, messages.WARNING, msg)
         else:
             msg = _('There is an error in the index number or password')
             messages.add_message(request, messages.WARNING, msg)
+            return HttpResponseRedirect('/')
+
     return render(request, 'account/lecturer/login.html', {
         'title': _('Login'),
     })

@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from account.views import *
+from attendance.views import CourseUpdateView, CourseDeleteView, register_in_course, return_course, attendance
 
 app_name = 'account'
 urlpatterns = [
@@ -18,5 +19,14 @@ urlpatterns = [
     path('lecturer-profile-update/', lecturer_profile_update, name='lecturer-profile-update'),
 
     path('logout/', user_logout, name='logout'),
+
+    path('detail/<slug:pk>/update', CourseUpdateView.as_view(), name='course-update'),
+    path('detail/<slug:pk>/delete', CourseDeleteView.as_view(), name='course-delete'),
+
+    path('register/<int:id>', register_in_course, name='register-course'),
+    path('return/<int:id>', return_course, name='return-course'),
+
+
+    path('attendance-course/', attendance, name='attendance-course'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
