@@ -81,6 +81,7 @@ def login_page(request):
 
 def create_dataset(username):
     id = username
+    print(id)
     if not os.path.exists('account/face_recognition_data/training_dataset/{}/'.format(id)):
         os.makedirs('account/face_recognition_data/training_dataset/{}/'.format(id))
     directory = 'account/face_recognition_data/training_dataset/{}/'.format(id)
@@ -91,7 +92,7 @@ def create_dataset(username):
     print("[INFO] Loading the facial detector")
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(
-        'face_recognition_data/shape_predictor_68_face_landmarks.dat')  # Add path to the shape predictor ######CHANGE TO RELATIVE PATH LATER
+        'account/face_recognition_data/shape_predictor_68_face_landmarks.dat')  # Add path to the shape predictor ######CHANGE TO RELATIVE PATH LATER
     fa = FaceAligner(predictor, desiredFaceWidth=96)
     # capture images from the webcam and process and detect the face
     # Initialize the video stream
@@ -124,7 +125,9 @@ def create_dataset(username):
         for face in faces:
             print("inside for loop")
             (x, y, w, h) = face_utils.rect_to_bb(face)
-
+            print(type(frame), type(gray_frame), type(face),)
+            # TODO: I edit in core of code (eyesCenter = (int((leftEyeCenter[0] + rightEyeCenter[0]) // 2),
+            # 					  int((leftEyeCenter[1] + rightEyeCenter[1]) // 2)))
             face_aligned = fa.align(frame, gray_frame, face)
             # Whenever the program captures the face, we will write that is a folder
             # Before capturing the face, we need to tell the script whose face it is
@@ -163,6 +166,7 @@ def create_dataset(username):
     vs.stop()
     # destroying all the windows
     cv2.destroyAllWindows()
+    return redirect('/student-login/')
 
 
 def student_register(request):
@@ -177,7 +181,7 @@ def student_register(request):
             msg = _(
                 f'Congratulations {username} Your registration has been completed successfully.')
             messages.add_message(request, messages.SUCCESS, msg)
-            return redirect('/student-login/')
+            return create_dataset(username)
     else:
         form = StudentCreationForm()
     return render(request, 'account/student/register.html', {
@@ -255,7 +259,7 @@ def lecturer_login(request):
         email = request.POST['email']
         try:
             username = get_object_or_404(User, email=email)
-        except :
+        except:
             msg = _('There is an error in the index number or password')
             messages.add_message(request, messages.WARNING, msg)
             return HttpResponseRedirect('/lecturer-login/')
