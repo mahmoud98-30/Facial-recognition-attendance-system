@@ -26,7 +26,8 @@ urlpatterns = [
     path('register/<int:id>', register_in_course, name='register-course'),
     path('return/<int:id>', return_course, name='return-course'),
 
-
     path('attendance-course/', attendance, name='attendance-course'),
+
+    path('train/', train, name='train'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

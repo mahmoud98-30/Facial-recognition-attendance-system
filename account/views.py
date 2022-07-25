@@ -1,19 +1,27 @@
 import os
+import pickle
+import dlib
+import cv2
+import imutils
+import face_recognition
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+from imutils.video import VideoStream
+from imutils.face_utils import rect_to_bb
+from imutils.face_utils import FaceAligner
+from face_recognition.face_recognition_cli import image_files_in_folder
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
+from sklearn.manifold import TSNE
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
-import dlib
-import cv2
-import imutils
-from imutils import face_utils
-from imutils.video import VideoStream
-from imutils.face_utils import rect_to_bb
-from imutils.face_utils import FaceAligner
 
-from account.forms import ProfileUpdateForm, StudentCreationForm, UpdateForm, LecturerCreationForm
+from account.forms import StudentCreationForm, UpdateForm, LecturerCreationForm
 from account.models import User
 from attendance.forms import CourseForm, AttendanceForm
 from attendance.models import Course, Attendance
@@ -79,6 +87,20 @@ def login_page(request):
     }, )
 
 
+def vizualize_Data(embedded, targets, ):
+    X_embedded = TSNE(n_components=2).fit_transform(embedded)
+
+    for i, t in enumerate(set(targets)):
+        idx = targets == t
+        plt.scatter(X_embedded[idx, 0], X_embedded[idx, 1], label=t)
+
+    plt.legend(bbox_to_anchor=(1, 1));
+    rcParams.update({'figure.autolayout': True})
+    plt.tight_layout()
+    plt.savefig('./media/recognition/training_visualisation.png')
+    plt.close()
+
+
 def create_dataset(username):
     id = username
     print(id)
@@ -124,7 +146,7 @@ def create_dataset(username):
 
         for face in faces:
             print("inside for loop")
-            (x, y, w, h) = face_utils.rect_to_bb(face)
+            (x, y, w, h) = rect_to_bb(face)
             print(type(frame), type(gray_frame), type(face),)
             # TODO: I edit in core of code (eyesCenter = (int((leftEyeCenter[0] + rightEyeCenter[0]) // 2),
             # 					  int((leftEyeCenter[1] + rightEyeCenter[1]) // 2)))
@@ -167,6 +189,60 @@ def create_dataset(username):
     # destroying all the windows
     cv2.destroyAllWindows()
     return redirect('/student-login/')
+
+
+@login_required(login_url='/login-page/')
+def train(request):
+   
+    training_dir = 'account/face_recognition_data/training_dataset'
+
+    count = 0
+    for person_name in os.listdir(training_dir):
+        curr_directory = os.path.join(training_dir, person_name)
+        if not os.path.isdir(curr_directory):
+            continue
+        for image_file in image_files_in_folder(curr_directory):
+            count += 1
+
+    X = []
+    y = []
+    i = 0
+
+    for person_name in os.listdir(training_dir):
+        print(str(person_name))
+        curr_directory = os.path.join(training_dir, person_name)
+        if not os.path.isdir(curr_directory):
+            continue
+        for image_file in image_files_in_folder(curr_directory):
+            print(str(image_file))
+            image = cv2.imread(image_file)
+            try:
+                X.append((face_recognition.face_encodings(image)[0]).tolist())
+
+                y.append(person_name)
+                i += 1
+            except:
+                print("removed")
+                os.remove(image_file)
+
+    targets = np.array(y)
+    encoder = LabelEncoder()
+    encoder.fit(y)
+    y = encoder.transform(y)
+    X1 = np.array(X)
+    print("shape: " + str(X1.shape))
+    np.save('account/face_recognition_data/classes.npy', encoder.classes_)
+    svc = SVC(kernel='linear', probability=True)
+    svc.fit(X1, y)
+    svc_save_path = "account/face_recognition_data/svc.sav"
+    with open(svc_save_path, 'wb') as f:
+        pickle.dump(svc, f)
+
+    vizualize_Data(X1, targets)
+
+    messages.success(request, f'Training Complete.')
+
+    return redirect('/')
 
 
 def student_register(request):
