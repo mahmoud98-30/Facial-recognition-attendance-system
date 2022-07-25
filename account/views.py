@@ -32,6 +32,8 @@ def home(request):
     form_course = CourseForm(request.POST or None)
     form_attendance = AttendanceForm(request.POST or None)
     course = Attendance.objects.filter(student=request.user.id)
+    lecturer_course = Course.objects.filter(lecturer=request.user.id)
+    print(lecturer_course)
     attendance = Attendance.objects.all()
 
     if request.method == 'POST' and "course_form" in request.POST:
@@ -47,7 +49,7 @@ def home(request):
         return render(request, 'index.html', {
             'form_course': form_course,
             'form_attendance': form_attendance,
-            'course': course,
+            'lecturer_course': lecturer_course,
             'attendance': attendance,
         }, )
 
@@ -58,7 +60,7 @@ def home(request):
             if Attendance.objects.filter(course=request.POST['course']).filter(student=request.user.id):
                 msg = _(
                     'you are already registered in this course.')
-                messages.add_message(request, messages.SUCCESS, msg)
+                messages.add_message(request, messages.WARNING, msg)
                 return HttpResponseRedirect("/")
             else:
                 form.save()
@@ -70,13 +72,15 @@ def home(request):
             return render(request, 'index.html', {
                 'form_course': form_course,
                 'form_attendance': form_attendance,
-                'course': course,
+                'course': lecturer_course,
+                'lecturer_course': lecturer_course,
                 'attendance': attendance,
             }, )
     return render(request, 'index.html', {
         'form_course': form_course,
         'form_attendance': form_attendance,
         'course': course,
+        'lecturer_course': lecturer_course,
         'attendance': attendance,
     }, )
 
@@ -277,7 +281,7 @@ def student_login(request):
             return redirect('/')
         else:
             msg = _('There is an error in the index number or password')
-            messages.add_message(request, messages.WARNING, msg)
+            messages.add_message(request, messages.ERROR, msg)
     return render(request, 'account/student/login.html', {
         'title': _('Login'),
     })
@@ -336,8 +340,8 @@ def lecturer_login(request):
         try:
             username = get_object_or_404(User, email=email)
         except:
-            msg = _('There is an error in the index number or password')
-            messages.add_message(request, messages.WARNING, msg)
+            msg = _('There is an error in the email or password')
+            messages.add_message(request, messages.ERROR, msg)
             return HttpResponseRedirect('/lecturer-login/')
         if username:
             password = request.POST['password']
@@ -347,11 +351,11 @@ def lecturer_login(request):
                 login(request, user)
                 return redirect('/')
             else:
-                msg = _('There is an error in the index number or password')
-                messages.add_message(request, messages.WARNING, msg)
+                msg = _('There is an error in the email or password')
+                messages.add_message(request, messages.ERROR, msg)
         else:
-            msg = _('There is an error in the index number or password')
-            messages.add_message(request, messages.WARNING, msg)
+            msg = _('There is an error in the email or password')
+            messages.add_message(request, messages.ERROR, msg)
             return HttpResponseRedirect('/')
 
     return render(request, 'account/lecturer/login.html', {

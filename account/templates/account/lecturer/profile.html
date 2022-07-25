@@ -22,6 +22,14 @@
                       <h5 class="mb-0">Profile</h5>
                     </div>
                     <div class="card-body">
+                        {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                                {{message}}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                         </div>
+                        {% endfor %}
+                        {% endif %}
                       <form method="post" >
                            {% csrf_token %}
                           {{user_form|crispy}}

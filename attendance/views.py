@@ -1,4 +1,4 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -42,6 +42,9 @@ class CourseDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
 @login_required(login_url='/student-login/')
 def return_course(request, id):
     Attendance.objects.get(id=id).delete()
+
+    msg = 'returned the course'
+    messages.add_message(request, messages.INFO, msg)
     return HttpResponseRedirect("/")
 
 
@@ -50,6 +53,8 @@ def register_in_course(request, id):
     course = Course.objects.get(id=id)
     t = Attendance(student=request.user, course=course)
     t.save()
+    msg = 'Done'
+    messages.add_message(request, messages.SUCCESS, msg)
     return HttpResponseRedirect("/")
 
 

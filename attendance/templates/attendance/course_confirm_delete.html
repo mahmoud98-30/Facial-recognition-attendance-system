@@ -3,6 +3,14 @@
 {% load crispy_forms_tags %}
 
 <div class="border p-4 mb-5">
+    {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                                    {{message}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                             </div>
+                            {% endfor %}
+                          {% endif %}
     <legend class="border-bottom pb-1 mb-3">Delete Course</legend>
     <form method="POST">
         <legend class="pb-1 mb-3 mt-4"> "Are you sure to delete{{object.name}}?" </legend>

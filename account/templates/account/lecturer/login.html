@@ -107,6 +107,14 @@
                 </a>
               </div>
               <!-- /Logo -->
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>
+                {% endfor %}
+                {% endif %}
               <h4 class="mb-2">lecturer login! 👋</h4>
               <form id="formAuthentication" class="mb-3"  method="POST">
                   {% csrf_token %}

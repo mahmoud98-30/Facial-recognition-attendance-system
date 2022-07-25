@@ -8,6 +8,14 @@
                     <h5 class="card-header">Add Course</h5>
                     <div class="card-body">
                       <div>
+                          {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                                    {{message}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                             </div>
+                            {% endfor %}
+                          {% endif %}
                          <form method="POST">
                         {% csrf_token %}
                         {{form|crispy}}

@@ -122,6 +122,14 @@
                   <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
                 </a>
               </div>
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                        {{message}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>
+                {% endfor %}
+                {% endif %}
               <!-- /Logo -->
               <h4 class="mb-2">studet sign up 🚀</h4>
 

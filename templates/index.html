@@ -3,6 +3,14 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block body %}
+    {% if messages %}
+      {% for message in messages %}
+          <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+              {{message}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+      {% endfor %}
+    {% endif %}
          {% if user.is_lecturer  %}
            <div class="col-md-12">
                   <div class="card mb-4">
@@ -34,7 +42,7 @@
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                    {% for q_course in course %}
+                    {% for q_course in lecturer_course %}
                       <tr>
 
                             <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.name }}</strong></td>
@@ -64,6 +72,14 @@
               <!--/ Basic Bootstrap Table -->
 
             </div>
+         {% elif user.is_superuser %}
+             <h1>hello {{user.first_name}}{{user.last_name}}</h1>
+             <a href="{% url 'account:train' %}" class="btn btn-success">
+                   <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Training Model
+             </a>
+             <a href="/admin/" class="btn btn-primary">
+                   <span class="tf-icons bx bxs-dashboard"></span>&nbsp; Admin Dashboard
+             </a>
          {% else %}
             <div class="col-md-12">
                               <div class="card mb-4">
