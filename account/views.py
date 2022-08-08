@@ -193,10 +193,9 @@ def create_dataset(username):
     vs.stop()
     # destroying all the windows
     cv2.destroyAllWindows()
-    return redirect('/student-login/')
 
 
-@login_required(login_url='/login-page/')
+
 def train(request):
    
     training_dir = 'account/face_recognition_data/training_dataset'
@@ -259,10 +258,14 @@ def student_register(request):
             username = form.cleaned_data.get('username')
             new_user.is_student = True
             new_user.save()
+
             msg = _(
                 f'Congratulations {username} Your registration has been completed successfully.')
             messages.add_message(request, messages.SUCCESS, msg)
-            return create_dataset(username)
+            create_dataset(username)
+            return train(request)
+
+
     else:
         form = StudentCreationForm()
     return render(request, 'account/student/register.html', {

@@ -99,34 +99,45 @@ def predict(face_aligned, svc, threshold=0.7):
     return (result[0], prob[0][result[0]])
 
 
-def update_attendance(present, id):
-    today = datetime.date.today()
-    time = datetime.datetime.now()
+def update_attendance(request,present, id):
     for person in present:
         print(person)
         student = User.objects.get(username=person)
-        try:
-            qc = Course.objects.get(id=id)
-        except:
-            qc = None
-        try:
-            qs = Attendance.objects.get(student=student, course=qc)
-        except:
-            qs = None
+        if student == request.user:
+            print(student == request.user)
+            try:
+                qc = Course.objects.get(id=id)
+            except:
+                qc = None
+            try:
+                qs = Attendance.objects.get(student=student, course=qc)
+            except:
+                qs = None
 
 
-        if qs is None:
-            if present[person] == True:
-                a = Attendance(student=student, course=qc, is_present=True)
-                a.save()
+            if qs is None:
+                if present[person] == True:
+                    a = Attendance(student=student, course=qc, is_present=True)
+                    a.save()
+                    msg = (
+                        'done')
+                    messages.add_message(request, messages.SUCCESS, msg)
+                else:
+                    a = Attendance(student=student, course=qc, is_present=False)
+                    a.save()
             else:
-                a = Attendance(student=student, course=qc, is_present=False)
-                a.save()
-        else:
-            if present[person] == True:
-                qs.is_present = True
-                qs.save(update_fields=['is_present'])
+                if present[person] == True:
+                    qs.is_present = True
+                    qs.save(update_fields=['is_present'])
+                    msg = (
+                        'done')
+                    messages.add_message(request, messages.SUCCESS, msg)
 
+        else:
+            print(student == request.user)
+            msg = (
+                'it,s not same')
+            messages.add_message(request, messages.WARNING, msg)
 
 def attendance_in(request, course):
     detector = dlib.get_frontal_face_detector()
@@ -218,6 +229,6 @@ def attendance_in(request, course):
 
     # destroying all the windows
     cv2.destroyAllWindows()
-    update_attendance(present, course)
+    update_attendance(request, present, course)
     print(present)
     return redirect('/')
