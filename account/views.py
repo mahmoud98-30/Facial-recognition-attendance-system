@@ -32,7 +32,7 @@ def home(request):
     form_course = CourseForm(request.POST or None)
     form_attendance = AttendanceForm(request.POST or None)
     course = Attendance.objects.filter(student=request.user.id)
-    lecturer_course = Course.objects.filter(lecturer=request.user.id)
+    lecturer_course = Attendance.objects.filter(student=request.user.id)
     print(lecturer_course)
     attendance = Attendance.objects.all()
 
@@ -91,18 +91,18 @@ def login_page(request):
     }, )
 
 
-def vizualize_Data(embedded, targets, ):
-    X_embedded = TSNE(n_components=2).fit_transform(embedded)
-
-    for i, t in enumerate(set(targets)):
-        idx = targets == t
-        plt.scatter(X_embedded[idx, 0], X_embedded[idx, 1], label=t)
-
-    plt.legend(bbox_to_anchor=(1, 1));
-    rcParams.update({'figure.autolayout': True})
-    plt.tight_layout()
-    plt.savefig('./media/recognition/training_visualisation.png')
-    plt.close()
+# def vizualize_Data(embedded, targets, ):
+#     X_embedded = TSNE(n_components=2).fit_transform(embedded)
+#
+#     for i, t in enumerate(set(targets)):
+#         idx = targets == t
+#         plt.scatter(X_embedded[idx, 0], X_embedded[idx, 1], label=t)
+#
+#     plt.legend(bbox_to_anchor=(1, 1));
+#     rcParams.update({'figure.autolayout': True})
+#     plt.tight_layout()
+#     plt.savefig('./media/recognition/training_visualisation.png')
+#     plt.close()
 
 
 def create_dataset(username):
@@ -154,6 +154,7 @@ def create_dataset(username):
             print(type(frame), type(gray_frame), type(face),)
             # TODO: I edit in core of code (eyesCenter = (int((leftEyeCenter[0] + rightEyeCenter[0]) // 2),
             # 					  int((leftEyeCenter[1] + rightEyeCenter[1]) // 2)))
+            # path "imutils\face_utils\facealigner.py"
             face_aligned = fa.align(frame, gray_frame, face)
             # Whenever the program captures the face, we will write that is a folder
             # Before capturing the face, we need to tell the script whose face it is
@@ -242,7 +243,7 @@ def train(request):
     with open(svc_save_path, 'wb') as f:
         pickle.dump(svc, f)
 
-    vizualize_Data(X1, targets)
+    # vizualize_Data(X1, targets)
 
     messages.success(request, f'Training Complete.')
 

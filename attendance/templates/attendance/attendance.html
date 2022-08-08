@@ -3,5 +3,51 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block body %}
+<div class="container-xxl flex-grow-1 container-p-y">
+                          <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Course</h4>
 
+                          <!-- Basic Bootstrap Table -->
+                          <div class="card">
+                            <h5 class="card-header">Your Course</h5>
+                            <div class="table-responsive text-nowrap">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>Course</th>
+                                    <th>Teacher</th>
+                                    <th>state</th>
+                                    <th>Presence</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0">
+                                {% for q_course in course %}
+                                  <tr>
+
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.lecturer }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.is_present }}</strong></td>
+
+                                        <td>
+                                          <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                              <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                              <a class="dropdown-item" href="{% url "account:return-course" q_course.id %}"
+                                                ><i class="bx bx-edit-alt me-1"></i>Present</a
+                                              >
+
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+
+            </div>
 {% endblock body %}

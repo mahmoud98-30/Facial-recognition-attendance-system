@@ -105,17 +105,17 @@
                 <div data-i18n="Analytics">Home</div>
               </a>
 
-
+            {% if user.is_student  %}
             <li class="menu-header small text-uppercase">
               <span class="menu-header-text">Course</span>
             </li>
-
-            </li><li class="menu-item ">
+                </li><li class="menu-item ">
               <a href="{% url "account:attendance-course" %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-detail"></i>
                 <div data-i18n="Analytics">Attendance</div>
               </a>
             </li>
+            {% endif %}
 
           </ul>
         </aside>

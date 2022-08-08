@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from account.views import *
-from attendance.views import CourseUpdateView, CourseDeleteView, register_in_course, return_course, attendance
+from attendance.views import CourseUpdateView, CourseDeleteView, register_in_course, return_course, attendance, \
+    attendance_in
 
 app_name = 'account'
 urlpatterns = [
@@ -20,13 +21,14 @@ urlpatterns = [
 
     path('logout/', user_logout, name='logout'),
 
-    path('detail/<slug:pk>/update', CourseUpdateView.as_view(), name='course-update'),
-    path('detail/<slug:pk>/delete', CourseDeleteView.as_view(), name='course-delete'),
+    path('detail/<slug:pk>/update/', CourseUpdateView.as_view(), name='course-update'),
+    path('detail/<slug:pk>/delete/', CourseDeleteView.as_view(), name='course-delete'),
 
-    path('register/<int:id>', register_in_course, name='register-course'),
-    path('return/<int:id>', return_course, name='return-course'),
+    path('register/<int:id>/', register_in_course, name='register-course'),
+    path('return/<int:id>/', return_course, name='return-course'),
 
     path('attendance-course/', attendance, name='attendance-course'),
+    path('attendance-in/<int:course>/', attendance_in, name='attendance-in'),
 
     path('train/', train, name='train'),
 

@@ -13,10 +13,10 @@
                           {% endif %}
     <legend class="border-bottom pb-1 mb-3">Delete Course</legend>
     <form method="POST">
-        <legend class="pb-1 mb-3 mt-4"> "Are you sure to delete{{object.name}}?" </legend>
+        <legend class="pb-1 mb-3 mt-4"> "Are you sure to delete ({{object.name}})?" </legend>
         {% csrf_token %}
         <input class="btn btn-danger mt-3" type="submit" value="Delete">
-        <a class="btn btn-secondary mt-3 back-btn" href="{% url "account:course-delete" object.id%}">Back</a>
+        <a class="btn btn-secondary mt-3 back-btn" href="/">Back</a>
     </form>
 </div>
 {% endblock body %}
