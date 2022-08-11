@@ -26,6 +26,8 @@ class CourseUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Course
     template_name = 'attendance/course_update.html'
     form_class = CourseForm
+    success_url = '/'
+
 
     def form_valid(self, form):
         form.instance.lecturer = self.request.user
@@ -229,6 +231,7 @@ def attendance_in(request, course):
 
     # destroying all the windows
     cv2.destroyAllWindows()
+    print(course)
     update_attendance(request, present, course)
     print(present)
-    return redirect('/')
+    return redirect('/attendance-course/')

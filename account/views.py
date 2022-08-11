@@ -32,9 +32,10 @@ def home(request):
     form_course = CourseForm(request.POST or None)
     form_attendance = AttendanceForm(request.POST or None)
     course = Attendance.objects.filter(student=request.user.id)
-    lecturer_course = Attendance.objects.filter(student=request.user.id)
+    lecturer_course = Course.objects.filter(lecturer=request.user.id)
     print(lecturer_course)
     attendance = Attendance.objects.all()
+    student_num = User.objects.filter(is_student=True).count()
 
     if request.method == 'POST' and "course_form" in request.POST:
         if form_course.is_valid():
@@ -73,6 +74,7 @@ def home(request):
                 'form_course': form_course,
                 'form_attendance': form_attendance,
                 'course': lecturer_course,
+                'course': course,
                 'lecturer_course': lecturer_course,
                 'attendance': attendance,
             }, )
@@ -82,6 +84,7 @@ def home(request):
         'course': course,
         'lecturer_course': lecturer_course,
         'attendance': attendance,
+        'student_num': student_num,
     }, )
 
 
@@ -151,7 +154,7 @@ def create_dataset(username):
         for face in faces:
             print("inside for loop")
             (x, y, w, h) = rect_to_bb(face)
-            print(type(frame), type(gray_frame), type(face),)
+            print(type(frame), type(gray_frame), type(face), )
             # TODO: I edit in core of code (eyesCenter = (int((leftEyeCenter[0] + rightEyeCenter[0]) // 2),
             # 					  int((leftEyeCenter[1] + rightEyeCenter[1]) // 2)))
             # path "imutils\face_utils\facealigner.py"
@@ -193,11 +196,10 @@ def create_dataset(username):
     vs.stop()
     # destroying all the windows
     cv2.destroyAllWindows()
-
+    return redirect('/student-login/')
 
 
 def train(request):
-   
     training_dir = 'account/face_recognition_data/training_dataset'
 
     count = 0
@@ -262,8 +264,8 @@ def student_register(request):
             msg = _(
                 f'Congratulations {username} Your registration has been completed successfully.')
             messages.add_message(request, messages.SUCCESS, msg)
-            create_dataset(username)
-            return train(request)
+
+            return create_dataset(username)
 
 
     else:

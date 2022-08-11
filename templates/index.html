@@ -74,9 +74,16 @@
             </div>
          {% elif user.is_superuser %}
              <h1>hello {{user.first_name}}{{user.last_name}}</h1>
-             <a href="{% url 'account:train' %}" class="btn btn-success">
+             {% if student_num > 1 %}
+             <a href="{% url 'account:train' %}" class="btn btn-success ">
                    <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Training Model
              </a>
+                 {% else %}
+                  <a href="{% url 'account:train' %}" class="btn btn-success disabled">
+                   <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Training Model
+             </a>
+             <p style="color: #d93519">it should be have more than one student to train </p>
+                 {% endif %}
              <a href="/admin/" class="btn btn-primary">
                    <span class="tf-icons bx bxs-dashboard"></span>&nbsp; Admin Dashboard
              </a>
