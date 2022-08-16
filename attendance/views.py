@@ -28,7 +28,6 @@ class CourseUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     form_class = CourseForm
     success_url = '/'
 
-
     def form_valid(self, form):
         form.instance.lecturer = self.request.user
         return super().form_valid(form)
@@ -101,7 +100,7 @@ def predict(face_aligned, svc, threshold=0.7):
     return (result[0], prob[0][result[0]])
 
 
-def update_attendance(request,present, id):
+def update_attendance(request, present, id):
     for person in present:
         print(person)
         student = User.objects.get(username=person)
@@ -115,7 +114,6 @@ def update_attendance(request,present, id):
                 qs = Attendance.objects.get(student=student, course=qc)
             except:
                 qs = None
-
 
             if qs is None:
                 if present[person] == True:
@@ -140,6 +138,7 @@ def update_attendance(request,present, id):
             msg = (
                 'it,s not same')
             messages.add_message(request, messages.WARNING, msg)
+
 
 def attendance_in(request, course):
     detector = dlib.get_frontal_face_detector()
@@ -235,3 +234,11 @@ def attendance_in(request, course):
     update_attendance(request, present, course)
     print(present)
     return redirect('/attendance-course/')
+
+
+def edit_attendance(request):
+    course = Attendance.objects.filter(course__lecturer=request.user.id)
+    return render(request, 'attendance/edit_attendance.html', {
+        'course': course
+
+    }, )

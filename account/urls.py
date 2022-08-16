@@ -4,7 +4,7 @@ from django.conf import settings
 
 from account.views import *
 from attendance.views import CourseUpdateView, CourseDeleteView, register_in_course, return_course, attendance, \
-    attendance_in
+    attendance_in, edit_attendance
 
 app_name = 'account'
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('lecturer-register/', lecturer_register, name='lecturer-register'),
     path('lecturer-login/', lecturer_login, name='lecturer-login'),
     path('lecturer-profile-update/', lecturer_profile_update, name='lecturer-profile-update'),
+    path('edit-attendance/', edit_attendance, name='edit-attendance'),
 
     path('logout/', user_logout, name='logout'),
 
