@@ -4,7 +4,7 @@ from django.conf import settings
 
 from account.views import *
 from attendance.views import CourseUpdateView, CourseDeleteView, register_in_course, return_course, attendance, \
-    attendance_in, edit_attendance
+    attendance_in, edit_attendance, edit_attendance_in, edit_attendance_out
 
 app_name = 'account'
 urlpatterns = [
@@ -32,5 +32,8 @@ urlpatterns = [
     path('attendance-in/<int:course>/', attendance_in, name='attendance-in'),
 
     path('train/', train, name='train'),
+
+    path('edit-attendance-in/<int:course>/<str:student>', edit_attendance_in, name='edit-attendance-in'),
+    path('edit-attendance-out/<int:course>/<str:student>/', edit_attendance_out, name='edit-attendance-out'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

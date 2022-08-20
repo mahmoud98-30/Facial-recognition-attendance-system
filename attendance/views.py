@@ -242,3 +242,27 @@ def edit_attendance(request):
         'course': course
 
     }, )
+
+
+def edit_attendance_in(request, course, student):
+    q_course = Course.objects.get(id=course)
+    q_student = User.objects.get(id=student)
+    q_attendance = Attendance.objects.get(student=q_student, course=q_course)
+    q_attendance.is_present = True
+    q_attendance.save(update_fields=['is_present'])
+    msg = (
+        'done')
+    messages.add_message(request, messages.SUCCESS, msg)
+    return redirect('/edit-attendance/')
+
+
+def edit_attendance_out(request, course, student):
+    q_course = Course.objects.get(id=course)
+    q_student = User.objects.get(id=student)
+    q_attendance = Attendance.objects.get(student=q_student, course=q_course)
+    q_attendance.is_present = False
+    q_attendance.save(update_fields=['is_present'])
+    msg = (
+        'done')
+    messages.add_message(request, messages.SUCCESS, msg)
+    return redirect('/edit-attendance/')

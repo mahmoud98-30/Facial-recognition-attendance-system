@@ -25,7 +25,13 @@
 
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.lecturer }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.is_present }}</strong></td>
+                                        <td style="width:15%">
+                                            {% if q_course.is_present %}
+                                            <img style="width: 35%;" src="{% static 'attendance/assets/img/c.png' %}">
+                                            {% else %}
+                                            <img style="width: 35%;" src="{% static 'attendance/assets/img/w.png' %}">
+                                            {% endif %}
+                                        </td>
 
                                         <td>
                                           <div class="dropdown">

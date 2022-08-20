@@ -38,15 +38,17 @@
 
                                         <td>
                                           <div class="dropdown">
-{#                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">#}
-{#                                              <i class="bx bx-dots-vertical-rounded"></i>#}
-{#                                            </button>#}
-{#                                            <div class="dropdown-menu">#}
-{#                                              <a class="dropdown-item" href="{% url "account:attendance-in" q_course.course.id %}"#}
-{#                                                ><i class="bx bx-edit-alt me-1"></i>Present</a#}
-{#                                              >#}
-{##}
-{#                                            </div>#}
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                              <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                              <a class="dropdown-item" href="{% url "account:edit-attendance-in" q_course.course.id q_course.student.id  %}"
+                                                ><i class="bx bx-edit-alt me-1"></i>Present</a
+                                              >
+                                                <a class="dropdown-item" href="{% url "account:edit-attendance-out" q_course.course.id q_course.student.id  %}"
+                                                ><i class="bx bx-edit-alt me-1"></i>Absent</a>
+
+                                            </div>
                                           </div>
                                         </td>
 
