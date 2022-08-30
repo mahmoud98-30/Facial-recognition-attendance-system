@@ -15,7 +15,10 @@
                                   <tr>
                                     <th>Course</th>
                                     <th>Student</th>
+                                    <th>Name</th>
                                     <th>State</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
                                     <th>Edit</th>
                                   </tr>
                                 </thead>
@@ -25,7 +28,7 @@
 
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.student }}</strong></td>
-
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.student.first_name }}{{ q_course.student.last_name }}</strong></td>
 {#                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.is_present }}</strong></td>#}
                                         <td style="width:15%">
                                             {% if q_course.is_present %}
@@ -34,6 +37,8 @@
                                             <img style="width: 35%;" src="{% static 'attendance/assets/img/w.png' %}">
                                             {% endif %}
                                         </td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.date }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.time }}</strong></td>
 
 
                                         <td>

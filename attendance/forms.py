@@ -1,12 +1,15 @@
 from django import forms
+from django.forms import widgets
 
 from attendance.models import Course, Attendance
 
 
 class CourseForm(forms.ModelForm):
+    date = forms.DateField(widget=widgets.DateInput,)
+    time = forms.TimeField(widget=widgets.TimeInput,)
     class Meta:
         model = Course
-        fields = ('name',)
+        fields = ('name', 'date', 'time')
 
 
 class AttendanceForm(forms.ModelForm):

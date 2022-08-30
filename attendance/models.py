@@ -11,6 +11,8 @@ class Course(models.Model):
                                  on_delete=models.CASCADE,
                                  related_name="Lecturer",
                                  verbose_name=_("User"))
+    date = models.DateField()
+    time = models.TimeField(auto_now=False, auto_now_add=False)
 
     def __str__(self):
         return self.name

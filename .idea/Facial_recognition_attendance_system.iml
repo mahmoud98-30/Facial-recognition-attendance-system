@@ -16,8 +16,9 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/env" />
       <excludeFolder url="file://$MODULE_DIR$/fratvenv" />
+      <excludeFolder url="file://$MODULE_DIR$/frvenv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (Facial-recognition-attendance-system)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.10 (Facial-recognition-attendance-system)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

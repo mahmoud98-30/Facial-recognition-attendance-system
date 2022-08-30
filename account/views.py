@@ -5,8 +5,8 @@ import cv2
 import imutils
 import face_recognition
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import rcParams
+# import matplotlib.pyplot as plt
+# from matplotlib import rcParams
 from imutils.video import VideoStream
 from imutils.face_utils import rect_to_bb
 from imutils.face_utils import FaceAligner
