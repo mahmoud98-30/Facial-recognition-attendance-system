@@ -102,10 +102,10 @@ def predict(face_aligned, svc, threshold=0.7):
 
 def update_attendance(request, present, id):
     for person in present:
-        print(person)
+        print("person", person)
         student = User.objects.get(username=person)
-        if student == request.user:
-            print(student == request.user)
+        if student == person:
+
             try:
                 qc = Course.objects.get(id=id)
             except:
@@ -134,7 +134,7 @@ def update_attendance(request, present, id):
                     messages.add_message(request, messages.SUCCESS, msg)
 
         else:
-            print(student == request.user)
+
             msg = (
                 'it,s not same')
             messages.add_message(request, messages.WARNING, msg)
@@ -170,7 +170,7 @@ def attendance_in(request, course):
     while (True):
 
         frame = vs.read()
-
+        print(frame)
         frame = imutils.resize(frame, width=800)
 
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -334,19 +334,10 @@ def edit_attendance_in(request, course, student):
 
     # destroying all the windows
     cv2.destroyAllWindows()
-    print(course)
+    print("course", course)
     update_attendance(request, present, course)
-    print(present)
+    print("present", present)
     return redirect('/edit-attendance/')
-    # q_course = Course.objects.get(id=course)
-    # q_student = User.objects.get(id=student)
-    # q_attendance = Attendance.objects.get(student=q_student, course=q_course)
-    # q_attendance.is_present = True
-    # q_attendance.save(update_fields=['is_present'])
-    # msg = (
-    #     'done')
-    # messages.add_message(request, messages.SUCCESS, msg)
-    # return redirect('/edit-attendance/')
 
 
 def edit_attendance_out(request, course, student):
