@@ -101,10 +101,12 @@ def predict(face_aligned, svc, threshold=0.7):
 
 
 def update_attendance(request, present, id):
+    print("person", present)
     for person in present:
-        print("person", person)
-        student = User.objects.get(username=person)
-        if student == person:
+        print(" chack", present[person]==True)
+        if present[person] == True:
+            student = User.objects.get(username=person)
+            print("person", person)
 
             try:
                 qc = Course.objects.get(id=id)
@@ -116,28 +118,28 @@ def update_attendance(request, present, id):
                 qs = None
 
             if qs is None:
-                if present[person] == True:
-                    a = Attendance(student=student, course=qc, is_present=True)
-                    a.save()
-                    msg = (
-                        'done')
-                    messages.add_message(request, messages.SUCCESS, msg)
-                else:
-                    a = Attendance(student=student, course=qc, is_present=False)
-                    a.save()
+
+                msg = (
+                        'it,s not same')
+                messages.add_message(request, messages.WARNING, msg)
+
             else:
                 if present[person] == True:
+                    now = datetime.datetime.now()
                     qs.is_present = True
                     qs.save(update_fields=['is_present'])
+                    qc.date = datetime.date.today()
+                    qc.time = now.time()
+                    qc.save(update_fields=['date', 'time'])
                     msg = (
                         'done')
                     messages.add_message(request, messages.SUCCESS, msg)
 
-        else:
-
-            msg = (
-                'it,s not same')
-            messages.add_message(request, messages.WARNING, msg)
+        # else:
+        #
+        #     msg = (
+        #         'it,s not same')
+        #     messages.add_message(request, messages.WARNING, msg)
 
 
 def attendance_in(request, course):
@@ -335,8 +337,9 @@ def edit_attendance_in(request, course, student):
     # destroying all the windows
     cv2.destroyAllWindows()
     print("course", course)
-    update_attendance(request, present, course)
     print("present", present)
+    update_attendance(request, present, course)
+
     return redirect('/edit-attendance/')
 
 

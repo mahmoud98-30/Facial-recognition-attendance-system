@@ -1,0 +1,17 @@
+git clone https://github.com/mahmoud98-30/Facial-recognition-attendance-system.git
+
+cd Facial-recognition-attendance-system
+
+python -m venv env
+
+env\Scripts\activate
+
+pip install -r requirements.txt
+
+pip install Facial-recognition-attendance-system/dlib-19.22.99-cp310-cp310-win_amd64.whl
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py runserver

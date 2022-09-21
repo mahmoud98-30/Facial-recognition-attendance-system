@@ -23,10 +23,6 @@
                              <div id="div_id_name" class="form-group">
                              <label for="id_name" class=" requiredField">Course Name<span class="asteriskField">*</span> </label>
                              <div> <input type="text" name="name" maxlength="255" class="textinput textInput form-control" required="" id="id_name" data-dashlane-rid="79f13db9190542aa" data-form-type="" data-kwimpalaid="1661892687787-0"> </div> </div>
-                             <div id="div_id_date" class="form-group"> <label for="id_date" class=" requiredField">
-                                 Date<span class="asteriskField">*</span> </label> <div> <input type="date" name="date" class="dateinput form-control" required="" id="id_date" data-dashlane-rid="678ab270cb3b2de0" data-form-type=""> </div> </div>
-                             <div id="div_id_time" class="form-group"> <label for="id_time" class=" requiredField">
-                                Time<span class="asteriskField">*</span> </label> <div> <input type="time" name="time" class="timeinput form-control" required="" id="id_time" data-dashlane-rid="a5bc85c64af63713" data-form-type=""> </div> </div>
                         <input class="btn btn-secondary mt-4" name="course_form" id="course_form" type="submit" value="save">
                     </form>
                       </div>
@@ -55,8 +51,8 @@
                       <tr>
 
                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.name }}</strong></td>
-                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.date }}</strong></td>
-                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.time }}</strong></td>
+                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.date %}{{ q_course.date }}{% else %} - {% endif %}</strong></td>
+                          <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.time %}{{ q_course.time }}{% else %} - {% endif %}</strong></td>
                           <td>
                               <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -136,8 +132,8 @@
 
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.lecturer }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.date }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.time }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.date %}{{ q_course.course.date }}{% else %} - {% endif %}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.time %}{{ q_course.course.time }}{% else %} - {% endif %}</strong></td>
 
                                         <td>
                                           <div class="dropdown">

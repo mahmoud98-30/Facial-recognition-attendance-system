@@ -5,6 +5,14 @@
 {% block body %}
 <div class="container-xxl flex-grow-1 container-p-y">
                           <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Course</h4>
+                            {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                                    {{message}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                             </div>
+                            {% endfor %}
+                          {% endif %}
 
                           <!-- Basic Bootstrap Table -->
                           <div class="card">
@@ -14,10 +22,11 @@
                                 <thead>
                                   <tr>
                                     <th>Course</th>
-                                     <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Teacher</th>
+                                    <th>Student</th>
+                                    <th>Name</th>
                                     <th>State</th>
+                                    <th>Attendance Date</th>
+                                    <th>Attendance Time</th>
                                     <th>Presence</th>
                                   </tr>
                                 </thead>
@@ -26,9 +35,8 @@
                                   <tr>
 
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.date }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.time }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.lecturer }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ user.username }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{user.first_name}}{{user.last_name}}</strong></td>
                                         <td style="width:15%">
                                             {% if q_course.is_present %}
                                             <img style="width: 35%;" src="{% static 'attendance/assets/img/c.png' %}">
@@ -36,7 +44,8 @@
                                             <img style="width: 35%;" src="{% static 'attendance/assets/img/w.png' %}">
                                             {% endif %}
                                         </td>
-
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.date %}{{ q_course.course.date }}{% else %} - {% endif %}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.time %}{{ q_course.course.time }}{% else %} - {% endif %}</strong></td>
                                         <td>
                                           <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

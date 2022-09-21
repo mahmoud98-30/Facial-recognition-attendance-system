@@ -5,11 +5,10 @@ from attendance.models import Course, Attendance
 
 
 class CourseForm(forms.ModelForm):
-    date = forms.DateField(widget=widgets.DateInput,)
-    time = forms.TimeField(widget=widgets.TimeInput,)
+
     class Meta:
         model = Course
-        fields = ('name', 'date', 'time')
+        fields = ('name',)
 
 
 class AttendanceForm(forms.ModelForm):

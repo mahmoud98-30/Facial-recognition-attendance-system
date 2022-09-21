@@ -5,7 +5,14 @@
 {% block body %}
 <div class="container-xxl flex-grow-1 container-p-y">
                           <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Course</h4>
-
+                          {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                                    {{message}}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                             </div>
+                            {% endfor %}
+                          {% endif %}
                           <!-- Basic Bootstrap Table -->
                           <div class="card">
                             <h5 class="card-header">Your Course</h5>
@@ -17,9 +24,9 @@
                                     <th>Student</th>
                                     <th>Name</th>
                                     <th>State</th>
-                                    <th>Date</th>
-                                    <th>Time</th>
-                                    <th>Edit</th>
+                                    <th>Attendance Date</th>
+                                    <th>Attendance Time</th>
+                                    <th>Presence</th>
                                   </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
@@ -29,7 +36,6 @@
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.name }}</strong></td>
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.student }}</strong></td>
                                         <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.student.first_name }}{{ q_course.student.last_name }}</strong></td>
-{#                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.is_present }}</strong></td>#}
                                         <td style="width:15%">
                                             {% if q_course.is_present %}
                                             <img style="width: 35%;" src="{% static 'attendance/assets/img/c.png' %}">
@@ -37,8 +43,8 @@
                                             <img style="width: 35%;" src="{% static 'attendance/assets/img/w.png' %}">
                                             {% endif %}
                                         </td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.date }}</strong></td>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ q_course.course.time }}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.date %}{{ q_course.course.date }}{% else %} - {% endif %}</strong></td>
+                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{% if q_course.course.time %}{{ q_course.course.time }}{% else %} - {% endif %}</strong></td>
 
 
                                         <td>
